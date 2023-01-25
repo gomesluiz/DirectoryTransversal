@@ -1,0 +1,28 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-left">
+    <h1 class="display-4">Visualizador de Relatórios</h1>
+    <form method="post">
+        <div class="form-group">
+            <label asp-for="FileName">Selecione o relatório</label>
+            <select asp-for="FileName">
+                <option value="Relatorio_1.txt">Relatório financeiro</option>
+                <option value="Relatorio_2.txt">Relatório analítico</option>
+                <option value="Relatorio_3.txt">Relatório comercial</option>
+                <option value="Relatorio_4.txt">Relatório orçamentário</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Select" class="btn btn-primary" />
+        </div>
+    </form>
+    @if (!string.IsNullOrEmpty((string)@ViewData["FileContent"]))
+    {
+        <h2>Conteúdo do Arquivo: @ViewData["FileName"]</h2>
+        <p>@ViewData["FileContent"]</p>
+    }
+</div>
