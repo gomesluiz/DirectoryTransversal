@@ -32,9 +32,12 @@ namespace DirectoryTransversal.Pages
         */
         public void OnPost()
         {
-            ViewData["FileName"] = FileName;
-            if (!string.IsNullOrEmpty(FileName) && ValidateFileName(FileName))
+            
+            if (!string.IsNullOrEmpty(FileName))
             {
+                ViewData["FileName"] = FileName;
+                FileName = FileName.Replace("..", "");
+                   
                 var fullFilePath = _hostEnvironment.ContentRootPath + "/wwwroot/relatorios/" + FileName;
                 if (System.IO.File.Exists(fullFilePath))
                 {
@@ -47,10 +50,6 @@ namespace DirectoryTransversal.Pages
                     ViewData["FileContent"] = "Arquivo não encontrado!";
 
                 }
-            }
-            else
-            {
-                ViewData["FileContent"] = "Arquivo não encontrado!";
             }
         }
 
