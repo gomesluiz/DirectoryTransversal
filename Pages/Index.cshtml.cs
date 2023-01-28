@@ -17,7 +17,15 @@ namespace DirectoryTransversal.Pages
             _hostEnvironment = hostEnvironment;
         }
 
-        /*
+        /// <summary>
+        /// Method vulnerable to Directory Traversal attack.
+        /// 
+        /// Examples:
+        /// 
+        /// 1) ..\..\appsettings.json
+        /// 2) ..\..\..\..\..\..\..\Windows\win.ini
+        /// 
+        /// </summary>
         public void OnPost()
         {
             if (!string.IsNullOrEmpty(FileName))
@@ -28,41 +36,6 @@ namespace DirectoryTransversal.Pages
                 ViewData["FileName"] = FileName;
                 ViewData["FileContent"] = FileContent;
             }
-        }
-        */
-        public void OnPost()
-        {
-            
-            if (!string.IsNullOrEmpty(FileName))
-            {
-                ViewData["FileName"] = FileName;
-                FileName = FileName.Replace("..", "");
-                   
-                var fullFilePath = _hostEnvironment.ContentRootPath + "/wwwroot/relatorios/" + FileName;
-                if (System.IO.File.Exists(fullFilePath))
-                {
-                    FileContent = System.IO.File.ReadAllText(fullFilePath);
-                    ViewData["FileContent"] = FileContent;
-
-                }
-                else
-                {
-                    ViewData["FileContent"] = "Arquivo não encontrado!";
-
-                }
-            }
-        }
-
-        private bool ValidateFileName(string fileName)
-        {
-            fileName = fileName.Replace("..", "");
-            
-            if (!fileName.StartsWith("Relatorio"))
-                return false;
-
-            
-
-            return true;
         }
     }
 }
