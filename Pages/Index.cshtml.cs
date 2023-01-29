@@ -18,9 +18,9 @@ namespace DirectoryTransversal.Pages
         }
 
         /// <summary>
-        /// Method vulnerable to Directory Traversal attack.
+        /// Method protected from Directory Traversal attack.
         /// 
-        /// Examples:
+        /// Test examples:
         /// 
         /// 1) ..\..\appsettings.json
         /// 2) ..\..\..\..\..\..\..\Windows\win.ini
@@ -28,13 +28,27 @@ namespace DirectoryTransversal.Pages
         /// </summary>
         public void OnPost()
         {
+
             if (!string.IsNullOrEmpty(FileName))
             {
-                var fullFilePath = _hostEnvironment.ContentRootPath + "/wwwroot/relatorios/" + FileName;
-                var FileContent = System.IO.File.ReadAllText(fullFilePath);
+                // Defines BASE_DIRECTORY and canonicalize the path.
+                var BaseDirectory = Path.Join(_hostEnvironment.ContentRootPath, "wwwroot", "relatorios");
 
+                // Converts to canonicalized path and combine with base directory.
+                var CanonicalizedPath = FileName.Replace("..", "");
+                var FullFilePath  = Path.Join($"{BaseDirectory}/{CanonicalizedPath}");
+                
+                // Sets default values.
+                ViewData["FileContent"] = "Arquivo não encontrado!";
                 ViewData["FileName"] = FileName;
-                ViewData["FileContent"] = FileContent;
+
+                // Checks if the file existis.
+                if (System.IO.File.Exists(FullFilePath))
+                {
+                    FileContent = System.IO.File.ReadAllText(FullFilePath);
+                    ViewData["FileContent"] = FileContent;
+
+                }
             }
         }
     }
