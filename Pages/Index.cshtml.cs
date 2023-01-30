@@ -42,7 +42,7 @@ namespace DirectoryTransversal.Pages
                 ViewData["FileContent"] = "Arquivo não encontrado!";
                 ViewData["FileName"] = FileName;
 
-                // Checks if the file existis.
+                // Checks if the file exists.
                 if (System.IO.File.Exists(FullFilePath))
                 {
                     FileContent = System.IO.File.ReadAllText(FullFilePath);
